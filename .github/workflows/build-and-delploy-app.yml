@@ -99,7 +99,7 @@ jobs:
       - name: Deploy to SWA
         run:  |
           ls -al
-          swa deploy deploy -d ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} -env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
+          swa deploy deploy -d ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
 
       - name: Get Staging Hostname
         uses: azure/CLI@v2
