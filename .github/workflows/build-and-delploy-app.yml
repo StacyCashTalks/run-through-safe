@@ -50,7 +50,8 @@ jobs:
 
       - name: Deploy to SWA
         run:  |
-          swa deploy deploy -d (az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv) --env Production -V  silly
+          $Secret = az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv
+          swa deploy deploy -d $Secret --env Production -V  silly
 
 
 
