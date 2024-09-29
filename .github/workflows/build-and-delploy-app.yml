@@ -19,7 +19,7 @@ env:
 jobs:
   build-and-test:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Build and Test
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
           include-prerelease: false
 
       - name: 'Run Tests'
-        run: dotnet test --configuration Release
+        run: dotnet test --configuration Release **/*Tests.csproj
           
       - name: Client Build
         run: dotnet publish ./Client/Client.csproj --output ./dist/client
@@ -67,11 +67,11 @@ jobs:
       - name: Set the SWA environment
         id: swa-env
         run: |
-          if ($env:GITHUB_EVENT_NAME -eq "push") {
-              "ENVIRONMENT=production" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          } else {
-              "ENVIRONMENT=staging$($env:GITHUB_EVENT_NUMBER)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          }
+          if [ "${{ github.event_name }}" == "push" ]; then
+            echo "ENVIRONMENT=production">> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=staging${{ github.event.number }}">> $GITHUB_OUTPUT
+          fi
 
       - name: Azure Login
         uses: azure/login@v2
@@ -84,9 +84,9 @@ jobs:
         with:
           azcliversion: 2.42.0
           inlineScript: |
-            $SWA_SECRETS = az staticwebapp secrets list -n $env:SwaName -g $env:ResourceGroup --query 'properties.apiKey' -o tsv
-            Write-Output "::add-mask::$SWA_SECRETS"
-            "SWA_SECRETS=$SWA_SECRETS" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            SWA_SECRETS=$(az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv )
+            echo "::add-mask::$SWA_SECRETS"
+            echo SWA_SECRETS=$SWA_SECRETS >> $GITHUB_OUTPUT
 
       - name: Install Node
         uses: actions/setup-node@v4
@@ -104,9 +104,9 @@ jobs:
         id: get-hostname
         with:
           inlineScript: |
-            SWA_SECRETS=$(az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv )
-            echo "::add-mask::$SWA_SECRETS"
-            echo SWA_SECRETS=$SWA_SECRETS >> $GITHUB_OUTPUT
+            SWA_HOSTNAME=$(az staticwebapp environment list -n $SwaName -g $ResourceGroup --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv)
+            echo $SWA_HOSTNAME
+            echo SWA_HOSTNAME=$SWA_HOSTNAME >> $GITHUB_OUTPUT
 
       - name: Update Pull Request
         uses: actions/github-script@v7
