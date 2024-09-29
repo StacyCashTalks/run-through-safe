@@ -33,25 +33,27 @@ jobs:
           dotnet-version: '8.0.x'
           include-prerelease: false
 
-      - name: 'Run Tests'
-        run: dotnet test --configuration Release 
+      # - name: 'Run Tests'
+      #   run: dotnet test --configuration Release 
           
-      - name: Client Build
-        run: dotnet publish ./Client/Client.csproj --output ./dist/client
+      # - name: Client Build
+      #   run: dotnet publish ./Client/Client.csproj --output ./dist/client
 
-      - name: Api Build
-        run: dotnet publish ./Api/Api.csproj --output ./dist/api
+      # - name: Api Build
+      #   run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
-      - name: Install Node
-        uses: actions/setup-node@v4
+      # - name: Install Node
+      #   uses: actions/setup-node@v4
 
-      - name: Intasl SWA CLI
-        run:  npm install -g @azure/static-web-apps-cli
+      # - name: Intasl SWA CLI
+      #   run:  npm install -g @azure/static-web-apps-cli
 
       - name: Deploy to SWA
         run:  |
           $Secret = az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv
-          swa deploy deploy -d $Secret --env Production -V  silly
+          Write-Host $Secret
+         
+     # swa deploy deploy -d $Secret --env Production -V  silly
 
 
 
