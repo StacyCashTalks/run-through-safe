@@ -60,7 +60,7 @@ jobs:
           name: Application
           path: dist
 
-  deploy-to-swa:
+deploy-to-swa:
     runs-on: ubuntu-latest
     name: Deploy
     needs: build-and-test
