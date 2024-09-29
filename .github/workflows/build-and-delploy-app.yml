@@ -56,9 +56,11 @@ jobs:
       - name: Deploy to SWA
         run:  |
           Write-Host ${{ env.ResourceGroup }}
-          Write-Host ${{ SwaName }}
-          $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
-          Write-Host $Secret
+
+        #
+        #  Write-Host ${{ SwaName }}
+         # $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
+         # Write-Host $Secret
          
      # swa deploy deploy -d $Secret --env Production -V  silly
 
