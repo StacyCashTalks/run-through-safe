@@ -60,18 +60,6 @@ jobs:
           name: Application
           path: dist
 
-  deploy-to-swa:
-    runs-on: ubuntu-latest
-    name: Deploy
-    needs: build-and-test
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    steps:
-      - name: Download API
-        uses: actions/download-artifact@v4
-        with:
-          name: Application
-          path: dist
-
       - name: Set the SWA environment
         id: swa-env
         run: |
