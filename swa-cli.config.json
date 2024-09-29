@@ -3,7 +3,7 @@
     "configurations": {
       "deploy": {
         "appLocation": "dist\\client\\wwwroot",
-        "apiLocation": "dist\\Api",
+        "apiLocation": "dist\\api",
         "outputLocation": ".",
         "apiLanguage": "dotnetisolated",
         "apiVersion": "8.0",
