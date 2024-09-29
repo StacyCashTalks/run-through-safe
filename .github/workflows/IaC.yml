@@ -32,5 +32,5 @@ jobs:
             # az group create -n $ResourceGroup -l $Region
             # az deployment group create --resource-group $ResourceGroup --template-file main.bicep  --parameters name=$SwaName sku=free
             # az staticwebapp appsettings set --name $SwaName --resource-group $ResourceGroup --setting-name CosmosEndpoint=${{ secrets.COSMOS_ENDPOINT  }} CosmosKey=${{ secrets.COSMOS_KEY }} TodoContainerName=${{ vars.TODO_CONTAINER_NAME }} TodoDatabaseName=${{ vars.TODO_DATABASE_NAME }}
-            SWA_SECRETS=$(az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsvaz staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv)
+            SWA_SECRETS=$(az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv)
             
