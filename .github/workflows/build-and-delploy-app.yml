@@ -34,7 +34,7 @@ jobs:
           include-prerelease: false
 
       - name: 'Run Tests'
-        run: dotnet test --configuration Release **/*Tests.csproj   
+        run: dotnet test --configuration Release
           
       - name: Client Build
         run: dotnet publish ./Client/Client.csproj --output ./dist/client
