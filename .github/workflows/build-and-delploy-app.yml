@@ -92,7 +92,7 @@ jobs:
 
       - name: Deploy to SWA
         run:  |
-          ls static*
+          ls -al
           swa deploy deploy -d ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} -V  silly
 
       - name: Get Staging Hostname
