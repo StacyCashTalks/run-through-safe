@@ -19,7 +19,7 @@ env:
 jobs:
   build-and-test:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    runs-on: ubuntu-latest
+    runs-on: widows-latest
     name: Build and Test
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
           include-prerelease: false
 
       - name: 'Run Tests'
-        run: dotnet test --configuration Release **/*Tests.csproj
+        run: dotnet test --configuration Release 
           
       - name: Client Build
         run: dotnet publish ./Client/Client.csproj --output ./dist/client
@@ -42,17 +42,29 @@ jobs:
       - name: Api Build
         run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
-      - name: Upload Published Files
-        uses: actions/upload-artifact@v4
-        with:
-          name: Application
-          path: dist
+      - name: Install Node
+        uses: actions/setup-node@v4
+
+      - name: Intasl SWA CLI
+        run:  npm install -g @azure/static-web-apps-cli
+
+      - name: Deploy to SWA
+        run:  |
+          swa deploy deploy -d ${{ secrets.DEPLOYSECRET }} --env Production -V  silly
+
+
+
+      # - name: Upload Published Files
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Application
+      #     path: dist
 
   deploy-to-swa:
     runs-on: ubuntu-latest
     name: Deploy
     needs: build-and-test
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed') && false
     steps:
       - uses: actions/checkout@v4
         with:
