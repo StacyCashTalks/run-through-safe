@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to SWA
         run:  |
-          swa deploy deploy -d ${{ secrets.DEPLOYSECRET }} --env Production -V  silly
+          swa deploy deploy -d (az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv) --env Production -V  silly
 
 
 
@@ -64,7 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     needs: build-and-test
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed') && false
+    if: false 
+    # github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
       - uses: actions/checkout@v4
         with:
