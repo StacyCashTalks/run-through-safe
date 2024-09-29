@@ -42,6 +42,9 @@ jobs:
       - name: Api Build
         run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
+      - name: Copy static-web-app.config.json
+        run: cp ./static-web-app.config.json ./dist/static-web-app.config.json
+
       - name: Upload Published Files
         uses: actions/upload-artifact@v4
         with:
@@ -59,6 +62,9 @@ jobs:
         with:
           name: Application
           path: dist
+
+      - name: Copy static-web-app.config.json
+        run: cp ./dist/static-web-app.config.json ./static-web-app.config.json
 
       - name: Set the SWA environment
         id: swa-env
