@@ -42,9 +42,6 @@ jobs:
       - name: Api Build
         run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
-      - name: Copy swa-cli.config.json
-        run: cp ./swa-cli.config.json ./dist/swa-cli.config.json
-
       - name: Upload Published Files
         uses: actions/upload-artifact@v4
         with:
@@ -57,14 +54,15 @@ jobs:
     needs: build-and-test
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
       - name: Download API
         uses: actions/download-artifact@v4
         with:
           name: Application
           path: dist
-
-      - name: Copy swa-cli.config.json from dist directory
-        run: cp ./dist/swa-cli.config.json ./swa-cli.config.json
 
       - name: Set the SWA environment
         id: swa-env
@@ -98,8 +96,7 @@ jobs:
 
       - name: Deploy to SWA
         run:  |
-          ls -al
-          swa deploy deploy -d ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
+          swa deploy deploy -d  --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
 
       - name: Get Staging Hostname
         uses: azure/CLI@v2
