@@ -10,12 +10,12 @@ namespace StaticWebAppAuthentication.Client
 
         public StaticWebAppsAuthenticationStateProvider(HttpClient httpClient)
         {
-            _http = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+			_http = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            try
+			try
             {
                 var clientPrincipal = await GetClientPrinciple();
                 var claimsPrincipal = GetClaimsFromClientClaimsPrincipal(clientPrincipal);
@@ -29,27 +29,31 @@ namespace StaticWebAppAuthentication.Client
 
         private async Task<ClientPrincipal> GetClientPrinciple()
         {
-            var data = await _http.GetFromJsonAsync<AuthenticationData>("/.auth/me");
+			var data = await _http.GetFromJsonAsync<AuthenticationData>("/.auth/me");
             var clientPrincipal = data?.ClientPrincipal ?? new ClientPrincipal();
-            return clientPrincipal;
+			return clientPrincipal;
         }
 
         private static ClaimsPrincipal GetClaimsFromClientClaimsPrincipal(ClientPrincipal principal)
         {
-            principal.UserRoles =
+ 			principal.UserRoles =
                 principal.UserRoles?.Except(new[] { "anonymous" }, StringComparer.CurrentCultureIgnoreCase) ?? new List<string>();
 
-            if (!principal.UserRoles.Any())
+ 			if (!principal.UserRoles.Any())
             {
                 return new ClaimsPrincipal();
             }
 
-            var identity = new ClaimsIdentity(principal.IdentityProvider);
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, principal.UserId));
-            identity.AddClaim(new Claim(ClaimTypes.Name, principal.UserDetails));
-            identity.AddClaims(principal.UserRoles.Select(r => new Claim(ClaimTypes.Role, r)));
+ 			var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+		    {
+				new Claim(ClaimTypes.NameIdentifier, principal.UserId),
+				new Claim(ClaimTypes.Name, principal.UserDetails),
+		    }, principal.IdentityProvider));
 
-            return new ClaimsPrincipal(identity);
+            claimsPrincipal.Identities.First().AddClaims(principal.UserRoles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+			return new ClaimsPrincipal(claimsPrincipal);
+
         }
     }
 }

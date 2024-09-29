@@ -1,0 +1,13 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "deploy": {
+      "appLocation": "dist\\client\\wwwroot",
+      "apiLocation": "dist\\Api",
+      "outputLocation": ".",
+      "apiLanguage": "dotnetisolated",
+      "apiVersion": "8.0",
+      "apiBuildCommand": "dotnet publish -c Release"
+    }
+  }
+}
