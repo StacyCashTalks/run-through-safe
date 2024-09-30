@@ -55,6 +55,7 @@ jobs:
           echo $env:GITHUB_EVENT_NAME
           echo "Event Number"
           echo $env:GITHUB_EVENT_NUM
+          echo ${{ github.event.pull_request.number }}
           echo "Output"
           echo $env
           if ($env:GITHUB_EVENT_NAME -eq "push") {
