@@ -51,7 +51,7 @@ jobs:
       - name: Set the SWA environment
         id: swa-env
         run: |
-          if ( "${{ github.event_name }}" == "push" ) then{
+          if ( "${{ github.event_name }}" == "push" ) {
             echo "ENVIRONMENT=default">> $GITHUB_OUTPUT
           }else{
             echo "ENVIRONMENT=staging${{ github.event.number }}">> $GITHUB_OUTPUT
