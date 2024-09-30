@@ -51,8 +51,11 @@ jobs:
       - name: Set the SWA environment
         id: swa-env
         run: |
+          echo "Event Name"
           echo $env:GITHUB_EVENT_NAME
+          echo "Event Number"
           echo $env:GITHUB_EVENT_NUMBER
+          echo "Output"
           echo $env
           if ($env:GITHUB_EVENT_NAME -eq "push") {
             "ENVIRONMENT=default" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -83,7 +86,7 @@ jobs:
         run: |
           $SWA_HOSTNAME = az staticwebapp environment list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
           echo $SWA_HOSTNAME
-          shell: pwsh
+        shell: pwsh
 
       - name: Update Pull Request
         uses: actions/github-script@v7
