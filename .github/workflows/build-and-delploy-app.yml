@@ -26,27 +26,26 @@ jobs:
         with:
           submodules: false
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          include-prerelease: false
 
-      # - name: Setup .NET
-      #   uses: actions/setup-dotnet@v4
-      #   with:
-      #     dotnet-version: '8.0.x'
-      #     include-prerelease: false
-
-      # - name: 'Run Tests'
-      #   run: dotnet test --configuration Release 
+      - name: 'Run Tests'
+        run: dotnet test --configuration Release 
           
-      # - name: Client Build
-      #   run: dotnet publish ./Client/Client.csproj --output ./dist/client
+      - name: Client Build
+        run: dotnet publish ./Client/Client.csproj --output ./dist/client
 
-      # - name: Api Build
-      #   run: dotnet publish ./Api/Api.csproj --output ./dist/api
+      - name: Api Build
+        run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
-      # - name: Upload Published Files
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: Application
-      #     path: dist
+      - name: Upload Published Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Application
+          path: dist
 
       - name: Set the SWA environment
         id: swa-env
@@ -63,16 +62,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - name: Install Node
-      #   uses: actions/setup-node@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
 
-      # - name: Install SWA CLI
-      #   run:  npm install -g @azure/static-web-apps-cli
+      - name: Install SWA CLI
+        run:  npm install -g @azure/static-web-apps-cli
 
-      # - name: Deploy to SWA
-      #   run:  |
-      #     $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
-      #     swa deploy deploy -d $Secret --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
+      - name: Deploy to SWA
+        run:  |
+          $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
+          swa deploy deploy -d $Secret --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
 
       - name: Get Staging Hostname
         if: github.event_name == 'pull_request'
