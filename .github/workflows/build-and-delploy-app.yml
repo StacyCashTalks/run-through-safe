@@ -80,8 +80,8 @@ jobs:
         id: get-hostname
         with:
           inlineScript: |
-            $SWA_HOSTNAME=az staticwebapp environment list -n $SwaName -g $ResourceGroup --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
-            "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+             $SWA_HOSTNAME=az staticwebapp environment list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
+             "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append"
 
       - name: Update Pull Request
         uses: actions/github-script@v7
