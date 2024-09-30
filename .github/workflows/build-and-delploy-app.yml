@@ -55,13 +55,13 @@ jobs:
           echo $env:GITHUB_EVENT_NAME
           echo "Event Number"
           echo $env:GITHUB_EVENT_NUM
-          echo ${{ github.event.pull_request.number }}
+          echo 
           echo "Output"
           echo $env
           if ($env:GITHUB_EVENT_NAME -eq "push") {
             "ENVIRONMENT=default" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           } else {
-            "ENVIRONMENT=staging$($env:GITHUB_EVENT_NUMBER)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "ENVIRONMENT=staging${{ github.event.pull_request.number }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           }
         shell: pwsh
 
@@ -87,6 +87,7 @@ jobs:
         run: |
           $SWA_HOSTNAME = az staticwebapp environment list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
           echo $SWA_HOSTNAME
+          echo ${{ steps.swa-env.outputs.ENVIRONMENT }} 
         shell: pwsh
 
       - name: Update Pull Request
