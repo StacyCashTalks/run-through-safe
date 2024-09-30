@@ -79,7 +79,7 @@ jobs:
         run: |
           $SWA_HOSTNAME = az staticwebapp environment list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
           echo $SWA_HOSTNAME
-          "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append}} 
+          "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append 
         shell: pwsh
 
       - name: Update Pull Request
