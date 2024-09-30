@@ -81,11 +81,7 @@ jobs:
         with:
           inlineScript: |
             $SWA_HOSTNAME=az staticwebapp environment list -n $SwaName -g $ResourceGroup --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
-            echo $SWA_HOSTNAME
             "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            
-            
-          #echo SWA_HOSTNAME=$SWA_HOSTNAME >> $GITHUB_OUTPUT
 
       - name: Update Pull Request
         uses: actions/github-script@v7
