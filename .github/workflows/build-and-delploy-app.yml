@@ -54,7 +54,7 @@ jobs:
           echo "Event Name"
           echo $env:GITHUB_EVENT_NAME
           echo "Event Number"
-          echo $env:GITHUB_EVENT_NUMBER
+          echo $env:GITHUB_EVENT_ID
           echo "Output"
           echo $env
           if ($env:GITHUB_EVENT_NAME -eq "push") {
