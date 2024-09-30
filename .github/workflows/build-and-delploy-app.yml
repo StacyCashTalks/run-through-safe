@@ -62,16 +62,6 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
-      # - name: Get SWA deployment token
-      #   id: get-secret-from-cli
-      #   uses: azure/CLI@v2
-      #   with:
-      #     azcliversion: 2.42.0
-      #     inlineScript: |
-      #       SWA_SECRETS=$(az staticwebapp secrets list -n $SwaName -g $ResourceGroup --query 'properties.apiKey' -o tsv )
-      #       echo "::add-mask::$SWA_SECRETS"
-      #       echo SWA_SECRETS=$SWA_SECRETS >> $GITHUB_OUTPUT
 
       - name: Install Node
         uses: actions/setup-node@v4
@@ -84,17 +74,18 @@ jobs:
           $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
           swa deploy deploy -d $Secret --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
 
-      #swa deploy deploy -d ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
-
       - name: Get Staging Hostname
         uses: azure/CLI@v2
         if: github.event_name == 'pull_request'
         id: get-hostname
         with:
           inlineScript: |
-            SWA_HOSTNAME=$(az staticwebapp environment list -n $SwaName -g $ResourceGroup --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv)
+            $SWA_HOSTNAME=az staticwebapp environment list -n $SwaName -g $ResourceGroup --query "[?contains(hostname,'${{ steps.swa-env.outputs.ENVIRONMENT }}')].hostname " -o tsv
             echo $SWA_HOSTNAME
-            echo SWA_HOSTNAME=$SWA_HOSTNAME >> $GITHUB_OUTPUT
+            "SWA_HOSTNAME=$SWA_HOSTNAME" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            
+            
+          #echo SWA_HOSTNAME=$SWA_HOSTNAME >> $GITHUB_OUTPUT
 
       - name: Update Pull Request
         uses: actions/github-script@v7
