@@ -51,13 +51,6 @@ jobs:
       - name: Set the SWA environment
         id: swa-env
         run: |
-          echo "Event Name"
-          echo $env:GITHUB_EVENT_NAME
-          echo "Event Number"
-          echo $env:GITHUB_EVENT_NUM
-          echo 
-          echo "Output"
-          echo $env
           if ($env:GITHUB_EVENT_NAME -eq "push") {
             "ENVIRONMENT=default" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           } else {
