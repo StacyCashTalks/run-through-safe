@@ -42,12 +42,6 @@ jobs:
       - name: Api Build
         run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
-      - name: Install Node
-        uses: actions/setup-node@v4
-
-      - name: Intasl SWA CLI
-        run:  npm install -g @azure/static-web-apps-cli
-
       - name: Upload Published Files
         uses: actions/upload-artifact@v4
         with:
@@ -58,8 +52,7 @@ jobs:
     runs-on: windows-latest
     name: Deploy
     needs: build-and-test
-    if: false 
-    # github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
       - uses: actions/checkout@v4
         with:
