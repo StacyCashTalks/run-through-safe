@@ -51,11 +51,12 @@ jobs:
       - name: Set the SWA environment
         id: swa-env
         run: |
-          if ( "${{ github.event_name }}" == "push" ) {
-            echo "ENVIRONMENT=default">> $GITHUB_OUTPUT
-          }else{
-            echo "ENVIRONMENT=staging${{ github.event.number }}">> $GITHUB_OUTPUT
+          if ($env:GITHUB_EVENT_NAME -eq "push") {
+            "ENVIRONMENT=default" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            "ENVIRONMENT=staging$($env:GITHUB_EVENT_NUMBER)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           }
+        shell: pwsh
 
       - name: Azure Login
         uses: azure/login@v2
