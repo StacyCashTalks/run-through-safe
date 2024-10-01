@@ -96,8 +96,9 @@ jobs:
             echo SWA_SECRETS=$SWA_SECRETS >> $GITHUB_OUTPUT        
 
       - name: Deploy Artifacts to SWA
-        run:  swa deploy deploy --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V silly
-          
+#        run:  swa deploy deploy --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V silly
+        run:  swa deploy --app-location dist/client/wwwroot --api-location dist/api --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V silly
+         
       - name: Get Staging Hostname
         uses: azure/CLI@v2
         if: github.event_name == 'pull_request'
