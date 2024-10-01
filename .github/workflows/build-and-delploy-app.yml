@@ -41,6 +41,9 @@ jobs:
       - name: Api Build
         run: dotnet publish ./Api/Api.csproj --output ./dist/api
 
+      - name: Copy Config File
+        run: cp ./swa-cli.config.json ./dist/        
+
       - name: Upload Published Files
         uses: actions/upload-artifact@v4
         with:
@@ -92,7 +95,7 @@ jobs:
       - name: Deploy Artifacts to SWA
         run: |
           npm install -g @azure/static-web-apps-cli
-          swa deploy deploy --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V silly
+          swa deploy deploy --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} --config ./dist/swa-cli.config.json -V silly
           
       - name: Get Staging Hostname
         uses: azure/CLI@v2
