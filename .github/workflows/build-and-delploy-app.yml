@@ -55,8 +55,7 @@ jobs:
           else
             echo "ENVIRONMENT=staging${{ github.event.number }}">> $GITHUB_OUTPUT
           fi
-        shell: pwsh
-
+          
       - name: Azure Login
         uses: azure/login@v2
         with:
