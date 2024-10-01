@@ -73,7 +73,7 @@ jobs:
 
       - name: Deploy Artifacts to SWA
         run: |
-          npm install -g @azure/static-web-apps-cli@1.1.1
+          npm install -g @azure/static-web-apps-cli
           swa deploy deploy --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V silly
           
       - name: Get Staging Hostname
