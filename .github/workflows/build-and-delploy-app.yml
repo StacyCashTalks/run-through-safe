@@ -77,10 +77,10 @@ jobs:
             echo "::add-mask::$SWA_SECRETS"
             echo SWA_SECRETS=$SWA_SECRETS >> $GITHUB_OUTPUT        
 
-      - name: Deploy to SWA
-        run:  |
-          $Secret = az staticwebapp secrets list -n ${{ env.SwaName }} -g ${{ env.ResourceGroup}} --query 'properties.apiKey' -o tsv
-          swa deploy deploy -d $Secret --env ${{ steps.swa-env.outputs.ENVIRONMENT }} -V  silly
+      - name: Deploy Artifacts to SWA
+        run: |
+          npm install -g @azure/static-web-apps-cli@1.1.1
+          swa deploy -a dist/client/wwwroot -i dist/api --deployment-token ${{ steps.get-secret-from-cli.outputs.SWA_SECRETS }} --env ${{ steps.swa-env.outputs.ENVIRONMENT }}
           
       - name: Get Staging Hostname
         uses: azure/CLI@v2
