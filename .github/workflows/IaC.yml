@@ -4,8 +4,8 @@ on:
   workflow_dispatch
 
 env:
-  ResourceGroup: ent-demo-rg
-  SwaName: ent-demo-swa
+  ResourceGroup: ent-demo-safe-rg
+  SwaName: ent-demo-swa-safe
   Region: westeurope
 
 jobs:
